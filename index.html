@@ -6,7 +6,6 @@
   <title>📚 Study with 둥둥</title>
   <meta property="og:title" content="📚 Study with 둥둥">
   <meta property="og:description" content="Mon–Fri Zoom Study Attendance">
-  <meta property="og:type" content="website">
   <style>
     :root {--bg:#f2f0eb;--card:#fff;--primary:#5c67f2;--primary-light:#eef0fe;--success:#22c55e;--success-light:#dcfce7;--streak:#f97316;--streak-light:#fff4ed;--text:#1a1a2e;--text-muted:#6b7280;--border:#e5e7eb;--shadow:0 1px 3px rgba(0,0,0,.08);--shadow-md:0 4px 12px rgba(0,0,0,.1);}
     *{box-sizing:border-box;margin:0;padding:0;}
@@ -42,11 +41,11 @@
     .drawer-label{font-size:12px;font-weight:700;color:var(--text-muted);margin-bottom:10px;}
     .drawer-photos{display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:8px;}
     .photo-thumb{border-radius:10px;overflow:hidden;aspect-ratio:4/3;box-shadow:var(--shadow);cursor:pointer;transition:transform .18s;background:#e5e7eb;}
-    .photo-thumb:hover{transform:scale(1.04);box-shadow:var(--shadow-md);}
+    .photo-thumb:hover{transform:scale(1.04);}
     .photo-thumb img{width:100%;height:100%;object-fit:cover;display:block;}
     .drawer-empty{font-size:13px;color:var(--text-muted);padding:8px 0;}
     .cal-nav{display:flex;align-items:center;justify-content:space-between;margin-bottom:14px;}
-    .cal-nav-btn{background:none;border:none;cursor:pointer;font-size:18px;color:var(--text-muted);padding:4px 8px;border-radius:8px;transition:background .15s;line-height:1;}
+    .cal-nav-btn{background:none;border:none;cursor:pointer;font-size:18px;color:var(--text-muted);padding:4px 8px;border-radius:8px;transition:background .15s;}
     .cal-nav-btn:hover{background:#f3f4f6;color:var(--text);}
     .cal-nav-title{font-size:15px;font-weight:800;}
     .cal-header-row{display:grid;grid-template-columns:repeat(7,1fr);gap:4px;margin-bottom:6px;}
@@ -108,7 +107,7 @@
     </div>
     <div class="cal-grid" id="cal-grid"></div>
   </div>
-  <div class="updated-at">Updated: 2026-04-14 (updating soon...)</div>
+  <div class="updated-at">Updated: 2026-04-14 12:57</div>
 </div>
 <div class="lightbox" id="lightbox">
   <button class="lb-close" onclick="closeLightbox()">×</button>
@@ -118,7 +117,7 @@
   <div class="lb-counter" id="lb-counter"></div>
 </div>
 <script>
-const PHOTOS=[];
+const PHOTOS=[{"date": "2026-04-13", "src": "photos/2026-04-13_1.jpg"}, {"date": "2026-04-13", "src": "photos/2026-04-13_2.jpg"}, {"date": "2026-04-13", "src": "photos/2026-04-13_3.jpg"}, {"date": "2026-04-14", "src": "photos/2026-04-14_1.jpg"}, {"date": "2026-04-14", "src": "photos/2026-04-14_2.jpg"}, {"date": "2026-04-14", "src": "photos/2026-04-14_3.jpg"}];
 const attendance=new Set(PHOTOS.map(p=>p.date));
 const photosByDate={};
 PHOTOS.forEach(p=>{if(!photosByDate[p.date])photosByDate[p.date]=[];photosByDate[p.date].push(p.src);});
@@ -126,14 +125,14 @@ function toDateStr(d){return d.getFullYear()+"-"+String(d.getMonth()+1).padStart
 function isWeekday(d){const day=d.getDay();return day>=1&&day<=5;}
 function getWeekdaysInMonth(y,m){const days=[],d=new Date(y,m,1);while(d.getMonth()===m){if(isWeekday(d))days.push(toDateStr(new Date(d)));d.setDate(d.getDate()+1);}return days;}
 function calcStreak(){const today=new Date();today.setHours(0,0,0,0);let streak=0,d=new Date(today);while(!isWeekday(d))d.setDate(d.getDate()-1);while(true){const ds=toDateStr(d);if(attendance.has(ds)){streak++;d.setDate(d.getDate()-1);while(d.getDay()===0||d.getDay()===6)d.setDate(d.getDate()-1);}else break;if(streak>365)break;}return streak;}
-const koWeek=["Sun","Mon","Tue","Wed","Thu","Fri","Sat"],koMonth=["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];
+const koMonth=["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"],koWeek=["Sun","Mon","Tue","Wed","Thu","Fri","Sat"];
 function friendlyDate(ds){const d=new Date(ds+"T00:00:00");return koMonth[d.getMonth()]+" "+d.getDate()+", "+d.getFullYear()+" ("+koWeek[d.getDay()]+")"}
 let selectedDate=null,calSelectedDate=null;
 const HOLIDAYS=new Set(["2025-01-01","2026-01-01","2027-01-01","2025-01-28","2025-01-29","2025-01-30","2026-02-16","2026-02-17","2026-02-18","2027-02-06","2027-02-07","2027-02-08","2025-03-01","2026-03-01","2027-03-01","2025-05-05","2026-05-05","2027-05-05","2026-05-24","2027-05-13","2025-06-06","2026-06-06","2027-06-06","2025-08-15","2026-08-15","2027-08-15","2025-10-05","2025-10-06","2025-10-07","2026-09-24","2026-09-25","2026-09-26","2027-10-14","2027-10-15","2027-10-16","2025-10-03","2026-10-03","2027-10-03","2025-10-09","2026-10-09","2027-10-09","2025-12-25","2026-12-25","2027-12-25"]);
 let displayYear,displayMonth;
 function showWeekDrawer(ds){const drawer=document.getElementById("week-photo-drawer"),label=document.getElementById("drawer-label"),grid=document.getElementById("drawer-photos");if(selectedDate===ds){selectedDate=null;drawer.classList.remove("open");renderWeek(new Date(),toDateStr(new Date()));return;}selectedDate=ds;const photos=photosByDate[ds]||[];label.textContent="📸 "+friendlyDate(ds);grid.innerHTML="";if(photos.length===0){grid.innerHTML='<div class="drawer-empty">No photos yet</div>';}else{photos.forEach((src,i)=>{const t=document.createElement("div");t.className="photo-thumb";const img=document.createElement("img");img.src=src;img.alt="photo";t.appendChild(img);img.addEventListener("click",e=>{e.stopPropagation();openLightbox(photos,i);});grid.appendChild(t);});}drawer.classList.add("open");renderWeek(new Date(),toDateStr(new Date()));}
 function renderWeek(now,todayStr){const grid=document.getElementById("week-grid");grid.innerHTML="";const dow=now.getDay(),monday=new Date(now);monday.setHours(0,0,0,0);monday.setDate(now.getDate()-(dow===0?6:dow-1));const labels=["MON","TUE","WED","THU","FRI"];for(let i=0;i<5;i++){const d=new Date(monday);d.setDate(monday.getDate()+i);const ds=toDateStr(d);const isToday=ds===todayStr,isFuture=d>now,isAttend=attendance.has(ds),isSelected=ds===selectedDate;const cell=document.createElement("div");cell.className="day-cell"+(isAttend?" attended":"")+(isToday?" today-cell":"")+(isFuture?" future-day":"")+(isSelected?" selected":"");if(isToday){const b=document.createElement("div");b.className="today-badge";b.textContent="Today";cell.appendChild(b);}cell.innerHTML+='<div class="day-name">'+labels[i]+'</div><div class="day-num">'+d.getDate()+'</div>'+(isAttend?'<div class="week-dot"></div>':'');if(!isFuture)cell.addEventListener("click",()=>{showWeekDrawer(ds);});grid.appendChild(cell);}}
-function renderMonth(now,todayStr){const y=displayYear,m=displayMonth;document.getElementById("month-label").textContent=["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"][m]+" "+y;const grid=document.getElementById("cal-grid");grid.innerHTML="";const firstDay=new Date(y,m,1).getDay(),lastDate=new Date(y,m+1,0).getDate();for(let i=0;i<firstDay;i++){const el=document.createElement("div");el.className="cal-day cal-empty";grid.appendChild(el);}for(let day=1;day<=lastDate;day++){const date=new Date(y,m,day),ds=toDateStr(date),dow=date.getDay();const isWeekend=dow===0||dow===6,isToday=ds===todayStr,isAttend=attendance.has(ds),isSelected=ds===calSelectedDate,isHoliday=!isWeekend&&HOLIDAYS.has(ds);const el=document.createElement("div");el.className="cal-day"+(isWeekend?" cal-weekend":"")+(isAttend?" cal-attended":"")+(isToday?" cal-today":"")+(isSelected?" cal-selected":"")+(isHoliday?" cal-holiday":"");el.innerHTML=day;if(!isWeekend)el.addEventListener("click",()=>{openCalDrawer(ds,grid,firstDay,lastDate,day,y,m,now,todayStr);});grid.appendChild(el);}}
+function renderMonth(now,todayStr){const y=displayYear,m=displayMonth;document.getElementById("month-label").textContent=koMonth[m]+" "+y;const grid=document.getElementById("cal-grid");grid.innerHTML="";const firstDay=new Date(y,m,1).getDay(),lastDate=new Date(y,m+1,0).getDate();for(let i=0;i<firstDay;i++){const el=document.createElement("div");el.className="cal-day cal-empty";grid.appendChild(el);}for(let day=1;day<=lastDate;day++){const date=new Date(y,m,day),ds=toDateStr(date),dow=date.getDay();const isWeekend=dow===0||dow===6,isToday=ds===todayStr,isAttend=attendance.has(ds),isSelected=ds===calSelectedDate,isHoliday=!isWeekend&&HOLIDAYS.has(ds);const el=document.createElement("div");el.className="cal-day"+(isWeekend?" cal-weekend":"")+(isAttend?" cal-attended":"")+(isToday?" cal-today":"")+(isSelected?" cal-selected":"")+(isHoliday?" cal-holiday":"");el.innerHTML=day;if(!isWeekend)el.addEventListener("click",()=>{openCalDrawer(ds,grid,firstDay,lastDate,day,y,m,now,todayStr);});grid.appendChild(el);}}
 function changeMonth(dir){displayMonth+=dir;if(displayMonth>11){displayMonth=0;displayYear++;}if(displayMonth<0){displayMonth=11;displayYear--;}calSelectedDate=null;document.querySelectorAll(".cal-drawer").forEach(el=>el.remove());const now=new Date(),todayStr=toDateStr(now);renderMonth(now,todayStr);}
 function openCalDrawer(ds,grid,firstDay,lastDate,clickedDay,y,m,now,todayStr){document.querySelectorAll(".cal-drawer").forEach(el=>el.remove());if(calSelectedDate===ds){calSelectedDate=null;renderMonth(now,todayStr);return;}calSelectedDate=ds;renderMonth(now,todayStr);const photos=photosByDate[ds]||[];const cellIndex=firstDay+clickedDay-1,rowEnd=Math.floor(cellIndex/7)*7+6;const cells=grid.children,insertAfter=cells[Math.min(rowEnd,cells.length-1)];const drawer=document.createElement("div");drawer.className="cal-drawer";const inner=document.createElement("div");inner.className="cal-drawer-inner";inner.innerHTML='<div class="drawer-label">📸 '+friendlyDate(ds)+'</div>';const pg=document.createElement("div");pg.className="drawer-photos";if(photos.length===0){pg.innerHTML='<div class="drawer-empty">No photos yet</div>';}else{photos.forEach((src,i)=>{const t=document.createElement("div");t.className="photo-thumb";const img=document.createElement("img");img.src=src;img.alt="photo";img.addEventListener("click",e=>{e.stopPropagation();openLightbox(photos,i);});t.appendChild(img);pg.appendChild(t);});}inner.appendChild(pg);drawer.appendChild(inner);if(insertAfter&&insertAfter.nextSibling)grid.insertBefore(drawer,insertAfter.nextSibling);else grid.appendChild(drawer);requestAnimationFrame(()=>drawer.classList.add("open"));}
 function renderStats(){const now=new Date(),todayStr=toDateStr(now);document.getElementById("streak-val").textContent=calcStreak();document.getElementById("total-val").textContent=attendance.size;const weekdays=getWeekdaysInMonth(now.getFullYear(),now.getMonth());const passed=weekdays.filter(ds=>ds<=todayStr),attended=passed.filter(ds=>attendance.has(ds)).length;document.getElementById("rate-val").textContent=(passed.length>0?Math.round((attended/passed.length)*100):0)+"%";}
