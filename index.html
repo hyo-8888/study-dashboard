@@ -48,6 +48,8 @@
     .cal-nav-btn{background:none;border:none;cursor:pointer;font-size:18px;color:var(--text-muted);padding:4px 8px;border-radius:8px;transition:background .15s;}
     .cal-nav-btn:hover{background:#f3f4f6;color:var(--text);}
     .cal-nav-title{font-size:15px;font-weight:800;}
+    .cal-today-btn{background:var(--primary-light);border:none;cursor:pointer;font-size:11px;font-weight:700;color:var(--primary);padding:4px 10px;border-radius:20px;transition:background .15s;}
+    .cal-today-btn:hover{background:#dde0fc;}
     .cal-header-row{display:grid;grid-template-columns:repeat(7,1fr);gap:4px;margin-bottom:6px;}
     .cal-header-cell{text-align:center;font-size:11px;font-weight:700;color:var(--text-muted);padding:4px 0;}
     .cal-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:4px;}
@@ -96,7 +98,10 @@
   <div class="card">
     <div class="cal-nav">
       <button class="cal-nav-btn" onclick="changeMonth(-1)">&#8249;</button>
-      <div class="cal-nav-title" id="month-label">Monthly Calendar</div>
+      <div style="display:flex;align-items:center;gap:10px;">
+        <div class="cal-nav-title" id="month-label">Monthly Calendar</div>
+        <button class="cal-today-btn" onclick="goToToday()">Today</button>
+      </div>
       <button class="cal-nav-btn" onclick="changeMonth(1)">&#8250;</button>
     </div>
     <div class="cal-header-row">
@@ -107,7 +112,7 @@
     </div>
     <div class="cal-grid" id="cal-grid"></div>
   </div>
-  <div class="updated-at">Updated: 2026-04-14 12:57</div>
+  <div class="updated-at">Updated: 2026-04-14 13:01</div>
 </div>
 <div class="lightbox" id="lightbox">
   <button class="lb-close" onclick="closeLightbox()">×</button>
@@ -117,7 +122,7 @@
   <div class="lb-counter" id="lb-counter"></div>
 </div>
 <script>
-const PHOTOS=[{"date": "2026-04-13", "src": "photos/2026-04-13_1.jpg"}, {"date": "2026-04-13", "src": "photos/2026-04-13_2.jpg"}, {"date": "2026-04-13", "src": "photos/2026-04-13_3.jpg"}, {"date": "2026-04-14", "src": "photos/2026-04-14_1.jpg"}, {"date": "2026-04-14", "src": "photos/2026-04-14_2.jpg"}, {"date": "2026-04-14", "src": "photos/2026-04-14_3.jpg"}];
+const PHOTOS=[{"date": "2026-04-13", "src": "photos/2026-04-13_1.jpg"}, {"date": "2026-04-13", "src": "photos/2026-04-13_2.jpg"}, {"date": "2026-04-13", "src": "photos/2026-04-13_3.jpg"}, {"date": "2026-04-14", "src": "photos/2026-04-14_1.jpg"}, {"date": "2026-04-14", "src": "photos/2026-04-14_2.jpg"}, {"date": "2026-04-14", "src": "photos/2026-04-14_3.jpg"}, {"date": "2026-04-13", "src": "photos/2026-04-13_4.jpg"}, {"date": "2026-04-13", "src": "photos/2026-04-13_5.jpg"}, {"date": "2026-04-13", "src": "photos/2026-04-13_6.jpg"}, {"date": "2026-04-14", "src": "photos/2026-04-14_4.jpg"}, {"date": "2026-04-14", "src": "photos/2026-04-14_5.jpg"}, {"date": "2026-04-14", "src": "photos/2026-04-14_6.jpg"}];
 const attendance=new Set(PHOTOS.map(p=>p.date));
 const photosByDate={};
 PHOTOS.forEach(p=>{if(!photosByDate[p.date])photosByDate[p.date]=[];photosByDate[p.date].push(p.src);});
@@ -134,6 +139,7 @@ function showWeekDrawer(ds){const drawer=document.getElementById("week-photo-dra
 function renderWeek(now,todayStr){const grid=document.getElementById("week-grid");grid.innerHTML="";const dow=now.getDay(),monday=new Date(now);monday.setHours(0,0,0,0);monday.setDate(now.getDate()-(dow===0?6:dow-1));const labels=["MON","TUE","WED","THU","FRI"];for(let i=0;i<5;i++){const d=new Date(monday);d.setDate(monday.getDate()+i);const ds=toDateStr(d);const isToday=ds===todayStr,isFuture=d>now,isAttend=attendance.has(ds),isSelected=ds===selectedDate;const cell=document.createElement("div");cell.className="day-cell"+(isAttend?" attended":"")+(isToday?" today-cell":"")+(isFuture?" future-day":"")+(isSelected?" selected":"");if(isToday){const b=document.createElement("div");b.className="today-badge";b.textContent="Today";cell.appendChild(b);}cell.innerHTML+='<div class="day-name">'+labels[i]+'</div><div class="day-num">'+d.getDate()+'</div>'+(isAttend?'<div class="week-dot"></div>':'');if(!isFuture)cell.addEventListener("click",()=>{showWeekDrawer(ds);});grid.appendChild(cell);}}
 function renderMonth(now,todayStr){const y=displayYear,m=displayMonth;document.getElementById("month-label").textContent=koMonth[m]+" "+y;const grid=document.getElementById("cal-grid");grid.innerHTML="";const firstDay=new Date(y,m,1).getDay(),lastDate=new Date(y,m+1,0).getDate();for(let i=0;i<firstDay;i++){const el=document.createElement("div");el.className="cal-day cal-empty";grid.appendChild(el);}for(let day=1;day<=lastDate;day++){const date=new Date(y,m,day),ds=toDateStr(date),dow=date.getDay();const isWeekend=dow===0||dow===6,isToday=ds===todayStr,isAttend=attendance.has(ds),isSelected=ds===calSelectedDate,isHoliday=!isWeekend&&HOLIDAYS.has(ds);const el=document.createElement("div");el.className="cal-day"+(isWeekend?" cal-weekend":"")+(isAttend?" cal-attended":"")+(isToday?" cal-today":"")+(isSelected?" cal-selected":"")+(isHoliday?" cal-holiday":"");el.innerHTML=day;if(!isWeekend)el.addEventListener("click",()=>{openCalDrawer(ds,grid,firstDay,lastDate,day,y,m,now,todayStr);});grid.appendChild(el);}}
 function changeMonth(dir){displayMonth+=dir;if(displayMonth>11){displayMonth=0;displayYear++;}if(displayMonth<0){displayMonth=11;displayYear--;}calSelectedDate=null;document.querySelectorAll(".cal-drawer").forEach(el=>el.remove());const now=new Date(),todayStr=toDateStr(now);renderMonth(now,todayStr);}
+function goToToday(){const now=new Date();displayYear=now.getFullYear();displayMonth=now.getMonth();calSelectedDate=null;document.querySelectorAll(".cal-drawer").forEach(el=>el.remove());renderMonth(now,toDateStr(now));}
 function openCalDrawer(ds,grid,firstDay,lastDate,clickedDay,y,m,now,todayStr){document.querySelectorAll(".cal-drawer").forEach(el=>el.remove());if(calSelectedDate===ds){calSelectedDate=null;renderMonth(now,todayStr);return;}calSelectedDate=ds;renderMonth(now,todayStr);const photos=photosByDate[ds]||[];const cellIndex=firstDay+clickedDay-1,rowEnd=Math.floor(cellIndex/7)*7+6;const cells=grid.children,insertAfter=cells[Math.min(rowEnd,cells.length-1)];const drawer=document.createElement("div");drawer.className="cal-drawer";const inner=document.createElement("div");inner.className="cal-drawer-inner";inner.innerHTML='<div class="drawer-label">📸 '+friendlyDate(ds)+'</div>';const pg=document.createElement("div");pg.className="drawer-photos";if(photos.length===0){pg.innerHTML='<div class="drawer-empty">No photos yet</div>';}else{photos.forEach((src,i)=>{const t=document.createElement("div");t.className="photo-thumb";const img=document.createElement("img");img.src=src;img.alt="photo";img.addEventListener("click",e=>{e.stopPropagation();openLightbox(photos,i);});t.appendChild(img);pg.appendChild(t);});}inner.appendChild(pg);drawer.appendChild(inner);if(insertAfter&&insertAfter.nextSibling)grid.insertBefore(drawer,insertAfter.nextSibling);else grid.appendChild(drawer);requestAnimationFrame(()=>drawer.classList.add("open"));}
 function renderStats(){const now=new Date(),todayStr=toDateStr(now);document.getElementById("streak-val").textContent=calcStreak();document.getElementById("total-val").textContent=attendance.size;const weekdays=getWeekdaysInMonth(now.getFullYear(),now.getMonth());const passed=weekdays.filter(ds=>ds<=todayStr),attended=passed.filter(ds=>attendance.has(ds)).length;document.getElementById("rate-val").textContent=(passed.length>0?Math.round((attended/passed.length)*100):0)+"%";}
 let lbPhotos=[],lbIdx=0;
