@@ -117,7 +117,7 @@
     </div>
     <div class="cal-grid" id="cal-grid"></div>
   </div>
-  <div class="updated-at">Updated: 2026-04-14 13:36</div>
+  <div class="updated-at">Updated: 2026-04-14 13:40</div>
 </div>
 <div class="lightbox" id="lightbox">
   <button class="lb-close" onclick="closeLightbox()">×</button>
@@ -153,6 +153,7 @@ function openLightbox(photos,idx){lbPhotos=photos;lbIdx=idx;updateLb();document.
 function lightboxNav(dir){lbIdx=(lbIdx+dir+lbPhotos.length)%lbPhotos.length;updateLb();}
 function closeLightbox(){document.getElementById("lightbox").classList.remove("open");document.body.style.overflow="";}
 document.addEventListener("keydown",e=>{const lb=document.getElementById("lightbox");if(!lb.classList.contains("open"))return;if(e.key==="Escape")closeLightbox();else if(e.key==="ArrowRight")lightboxNav(1);else if(e.key==="ArrowLeft")lightboxNav(-1);});
+(function(){let tx=0;const lb=document.getElementById("lightbox");lb.addEventListener("touchstart",e=>{tx=e.touches[0].clientX;},{passive:true});lb.addEventListener("touchmove",e=>{e.preventDefault();},{passive:false});lb.addEventListener("touchend",e=>{const dx=e.changedTouches[0].clientX-tx;if(Math.abs(dx)>50)lightboxNav(dx<0?1:-1);},{passive:true});})();
 function init(){const now=new Date(),todayStr=toDateStr(now);displayYear=now.getFullYear();displayMonth=now.getMonth();renderStats();renderWeek(now,todayStr);renderMonth(now,todayStr);}
 init();
 </script>
