@@ -112,7 +112,7 @@
     </div>
     <div class="cal-grid" id="cal-grid"></div>
   </div>
-  <div class="updated-at">Updated: 2026-04-14 13:01</div>
+  <div class="updated-at">Updated: 2026-04-14 13:19</div>
 </div>
 <div class="lightbox" id="lightbox">
   <button class="lb-close" onclick="closeLightbox()">×</button>
@@ -122,7 +122,7 @@
   <div class="lb-counter" id="lb-counter"></div>
 </div>
 <script>
-const PHOTOS=[{"date": "2026-04-13", "src": "photos/2026-04-13_1.jpg"}, {"date": "2026-04-13", "src": "photos/2026-04-13_2.jpg"}, {"date": "2026-04-13", "src": "photos/2026-04-13_3.jpg"}, {"date": "2026-04-14", "src": "photos/2026-04-14_1.jpg"}, {"date": "2026-04-14", "src": "photos/2026-04-14_2.jpg"}, {"date": "2026-04-14", "src": "photos/2026-04-14_3.jpg"}, {"date": "2026-04-13", "src": "photos/2026-04-13_4.jpg"}, {"date": "2026-04-13", "src": "photos/2026-04-13_5.jpg"}, {"date": "2026-04-13", "src": "photos/2026-04-13_6.jpg"}, {"date": "2026-04-14", "src": "photos/2026-04-14_4.jpg"}, {"date": "2026-04-14", "src": "photos/2026-04-14_5.jpg"}, {"date": "2026-04-14", "src": "photos/2026-04-14_6.jpg"}];
+const PHOTOS=[{"date": "2026-04-13", "src": "photos/2026-04-13_1.jpg"}, {"date": "2026-04-13", "src": "photos/2026-04-13_2.jpg"}, {"date": "2026-04-13", "src": "photos/2026-04-13_3.jpg"}, {"date": "2026-04-14", "src": "photos/2026-04-14_1.jpg"}, {"date": "2026-04-14", "src": "photos/2026-04-14_2.jpg"}, {"date": "2026-04-14", "src": "photos/2026-04-14_3.jpg"}];
 const attendance=new Set(PHOTOS.map(p=>p.date));
 const photosByDate={};
 PHOTOS.forEach(p=>{if(!photosByDate[p.date])photosByDate[p.date]=[];photosByDate[p.date].push(p.src);});
