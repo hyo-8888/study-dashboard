@@ -117,7 +117,7 @@
     </div>
     <div class="cal-grid" id="cal-grid"></div>
   </div>
-  <div class="updated-at">Updated: 2026-04-22 10:02</div>
+  <div class="updated-at">Updated: 2026-04-22 10:04</div>
 </div>
 <div class="lightbox" id="lightbox">
   <button class="lb-close" onclick="closeLightbox()">×</button>
@@ -127,7 +127,7 @@
   <div class="lb-counter" id="lb-counter"></div>
 </div>
 <script>
-const PHOTOS=[{"date": "2026-04-13", "src": "photos/2026-04-13_1.jpg"}, {"date": "2026-04-13", "src": "photos/2026-04-13_2.jpg"}, {"date": "2026-04-13", "src": "photos/2026-04-13_3.jpg"}, {"date": "2026-04-14", "src": "photos/2026-04-14_1.jpg"}, {"date": "2026-04-14", "src": "photos/2026-04-14_2.jpg"}, {"date": "2026-04-14", "src": "photos/2026-04-14_3.jpg"}, {"date": "2026-04-15", "src": "photos/2026-04-15_1.jpg"}, {"date": "2026-04-15", "src": "photos/2026-04-15_2.jpg"}, {"date": "2026-04-15", "src": "photos/2026-04-15_3.jpg"}, {"date": "2026-04-16", "src": "photos/2026-04-16_1.jpg"}, {"date": "2026-04-16", "src": "photos/2026-04-16_2.jpg"}, {"date": "2026-04-16", "src": "photos/2026-04-16_3.jpg"}, {"date": "2026-04-17", "src": "photos/2026-04-17_1.jpg"}, {"date": "2026-04-17", "src": "photos/2026-04-17_2.jpg"}, {"date": "2026-04-17", "src": "photos/2026-04-17_3.jpg"}, {"date": "2026-04-20", "src": "photos/2026-04-20_1.jpg"}, {"date": "2026-04-20", "src": "photos/2026-04-20_2.jpg"}, {"date": "2026-04-20", "src": "photos/2026-04-20_3.jpg"}, {"date": "2026-04-21", "src": "photos/2026-04-21_1.jpg"}, {"date": "2026-04-21", "src": "photos/2026-04-21_2.jpg"}, {"date": "2026-04-21", "src": "photos/2026-04-21_3.jpg"}];
+const PHOTOS=[{"date": "2026-04-13", "src": "photos/2026-04-13_1.jpg"}, {"date": "2026-04-13", "src": "photos/2026-04-13_2.jpg"}, {"date": "2026-04-13", "src": "photos/2026-04-13_3.jpg"}, {"date": "2026-04-14", "src": "photos/2026-04-14_1.jpg"}, {"date": "2026-04-14", "src": "photos/2026-04-14_2.jpg"}, {"date": "2026-04-14", "src": "photos/2026-04-14_3.jpg"}, {"date": "2026-04-15", "src": "photos/2026-04-15_1.jpg"}, {"date": "2026-04-15", "src": "photos/2026-04-15_2.jpg"}, {"date": "2026-04-15", "src": "photos/2026-04-15_3.jpg"}, {"date": "2026-04-16", "src": "photos/2026-04-16_1.jpg"}, {"date": "2026-04-16", "src": "photos/2026-04-16_2.jpg"}, {"date": "2026-04-16", "src": "photos/2026-04-16_3.jpg"}, {"date": "2026-04-17", "src": "photos/2026-04-17_1.jpg"}, {"date": "2026-04-17", "src": "photos/2026-04-17_2.jpg"}, {"date": "2026-04-17", "src": "photos/2026-04-17_3.jpg"}, {"date": "2026-04-20", "src": "photos/2026-04-20_1.jpg"}, {"date": "2026-04-20", "src": "photos/2026-04-20_2.jpg"}, {"date": "2026-04-20", "src": "photos/2026-04-20_3.jpg"}, {"date": "2026-04-21", "src": "photos/2026-04-21_1.jpg"}, {"date": "2026-04-21", "src": "photos/2026-04-21_2.jpg"}, {"date": "2026-04-21", "src": "photos/2026-04-21_3.jpg"}, {"date": "2026-04-22", "src": "photos/2026-04-22_1.jpg"}, {"date": "2026-04-22", "src": "photos/2026-04-22_2.jpg"}, {"date": "2026-04-22", "src": "photos/2026-04-22_3.jpg"}, {"date": "2026-04-22", "src": "photos/2026-04-22_4.jpg"}];
 const attendance=new Set(PHOTOS.map(p=>p.date));
 const photosByDate={};
 PHOTOS.forEach(p=>{if(!photosByDate[p.date])photosByDate[p.date]=[];photosByDate[p.date].push(p.src);});
